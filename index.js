@@ -9,13 +9,16 @@ app.use(bodyParser.json());
 
 let toys = toysDummyData;
 
-// '/toys?location=<location>' returning all the items
-// ▪ <location> to accept US-NC (for North Carolina), IE (for Ireland),
-//   or IN (for India), which results in a price calculation converting the
-//   prices in the JSON files (which are in USD) into the appropriate
-//   currency and applying sales tax, which is 8% for US-NC, 23% for
-//   IE, and 18% for India.
-// ▪ HTTP GET
+// GET '/toys?location=<location>' - Returns a list of all toys.
+// ▪ Structure:
+//  [
+//    {
+//      "name": “string”,
+//      "brand": “string”,
+//      "age-group": “string”,
+//      "prize": number
+//    },
+// ]
 app.get("/toys", (req, res) => {
   let location = req.query.location;
 
@@ -42,9 +45,12 @@ app.get("/toys", (req, res) => {
   });
 });
 
-// '/team' returns a JSON object with team name and all team member names
-// ▪ HTTP GET
-// ▪ Structure: {“team”: “string”, “membersNames”: [”string”]}
+// GET '/toys/team' - Returns a JSON object with team and member names.
+// ▪ Structure:
+//    {
+//      “team”: “string”,
+//      “membersNames”: [”string”]
+//    }
 app.get("/toys/team", (req, res) => {
   res.status(200).json({
     error: false,
@@ -56,15 +62,14 @@ app.get("/toys/team", (req, res) => {
   });
 });
 
-// '/toys' to add a new toy to the dataset.
-// ▪ Body format:
+// POST '/toys' - Add a new toy to the dataset.
+// ▪ Structure:
 //  {
-//      "name": "Medical Kit",
-//      "brand": "Fisher-Price",
-//      "age-group": "3 to 9",
-//      "prize": 1
+//      "name": “string”,
+//      "brand": “string”,
+//      "age-group": “string”,
+//      "prize": number
 //  }
-// ▪ HTTP POST
 app.post("/toys", (req, res) => {
   let newToy = req.body;
   toys.push(newToy);
