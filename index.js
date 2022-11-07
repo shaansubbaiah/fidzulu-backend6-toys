@@ -18,23 +18,21 @@ let toys = toysDummyData;
 // ▪ HTTP GET
 app.get("/toys", (req, res) => {
   let location = req.query.location;
-  console.log("location: " + location);
 
-  let responseToys = toys.slice();
-  console.log(toys);
+  let responseToys = JSON.parse(JSON.stringify(toys));
+
   responseToys.forEach((toy) => {
     if (location == "IE") {
       // IRELAND, USD to Euro, 23% Tax
-      toy.prize = toy.prize * 1.01 * 1.23;
+      toy.prize = (toy.prize * 1.01 * 1.23).toFixed(2);
     } else if (location == "IN") {
       // INDIA, USD to INR, 18% Tax
-      toy.prize = toy.prize * 82.14 * 1.18;
+      toy.prize = (toy.prize * 82.14 * 1.18).toFixed(2);
     } else {
       // Defaults to US, 8% Tax
-      toy.prize = toy.prize * 1 * 1.08;
+      toy.prize = (toy.prize * 1 * 1.08).toFixed(2);
     }
   });
-  console.log(responseToys);
 
   res.status(200).json({
     error: false,
@@ -58,7 +56,14 @@ app.get("/toys/team", (req, res) => {
   });
 });
 
-// '/toys'
+// '/toys' to add a new toy to the dataset.
+// ▪ Body format:
+//  {
+//      "name": "Medical Kit",
+//      "brand": "Fisher-Price",
+//      "age-group": "3 to 9",
+//      "prize": 1
+//  }
 // ▪ HTTP POST
 app.post("/toys", (req, res) => {
   let newToy = req.body;
